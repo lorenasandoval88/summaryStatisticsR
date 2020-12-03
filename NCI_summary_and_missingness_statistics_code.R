@@ -557,7 +557,7 @@ df7_miss_stat = MAKE.MISS.STAT(box_id7)
 df_final_miss_stat = rbind(df1_miss_stat, df2_miss_stat, df3_miss_stat, df4_miss_stat, df5_miss_stat, df6_miss_stat, df7_miss_stat)# old_df_miss_stat,df2_miss_stat,df3_miss_stat) 
 
 #Save the missingness statistics results as csv
-write.csv(df_final_miss_stat,"NCI_missingness_statistics.csv",row.names = FALSE)
+write.csv(df_final_miss_stat,"NCI_Missingness_Statistics.csv",row.names = FALSE)
 
 #[9a] Upload the combined file to box using the box file ID of the file to be replaced
 box_ul(120544434483, file="NCI_Missingness_Statistics.csv", pb = options()$boxr.progress,description = NULL) # UPLOAD AS NEW NCI_missingness_statistics.csv - DON'T CHANGE
