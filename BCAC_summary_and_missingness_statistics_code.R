@@ -410,17 +410,17 @@ MAKE.MISS.STAT <-function(box_id){
                           data$"HRTEver"!=888 |data$"HRTCurrent" !=888 |data$"EPEver" !=888| 
                           data$"FHisSecOC"!=888 |data$"FHisSecOCNr" !=888 |data$"fam1grBC50" !=888| 
                           data$"fam1grOC50"!=888)
-              data$"Detailed family history"<- "Data available"
+              data$"Detailed family history"[idx]<- "Data available"
               #-------------------------------
               data$"Benign breast disease"<- "missing"
               idx = which(data$"Biopsies_number"!=888 |data$"BBD_history" !=888 |data$"BBD_number" !=888|
                             data$"BBD_type1"!=888)
-              data$"Benign breast disease"<- "Data available"
+              data$"Benign breast disease"[idx]<- "Data available"
               #-------------------------------
               data$"Mode of detection"<- "missing"
               idx = which(data$"Screen_ever"!=888 |data$"Last_screen_year" !=888 |data$"Last_screen_month" !=888|
                             data$"Detection_screen"!=888 | data$"Detection_detailed"!=888)
-              data$"Mode of detection"<- "Data available"
+              data$"Mode of detection"[idx]<- "Data available"
               #------------------------------------------------------------------------ 
               
               variables<- c("Lifestyle","Reproductive history","Anthropometry","Hormone use",
