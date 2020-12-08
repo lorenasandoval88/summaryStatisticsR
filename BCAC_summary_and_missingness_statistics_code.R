@@ -371,57 +371,8 @@ MAKE.MISS.STAT <-function(data){
               data$ageInt[data$ageInt!=888]<- "Data available"
               data$ageInt[data$ageInt==888] <-"missing"
               
-              # risk factor broad categories-------------------------------
-              data$Lifestyle<- "missing"
-              idx = which(data$"eduCat"!=888 | !is.na(data$"eduComments") |
-                            data$"alcoholFreq" !=888|data$"alcoholCum" !=888 |
-                            data$"smokingEver" !=888| data$"SmoRegStartAge"!=888)
-              data$Lifestyle[idx] ="Data available"
-              #-------------------------------
-              data$"Reproductive history"<- "missing"
-              idx = which(data$"AgeMenarche"!=888 | data$"mensAgeLast"!= 888 |
-                            data$"mensRsn" !=888 |data$"MenoStat" !=888 |
-                            data$"parous" !=888 | data$"parity"!=888|
-                            data$"AgeFFTP" !=888 |data$"lastChildAge" !=888 |
-                            data$"breastfed" !=888 |data$"breastMos" !=888) 
-              data$"Reproductive history"[idx] ="Data available"
-              #-------------------------------
-              data$Anthropometry<- "missing"
-              idx = which(data$"weight"!=888 |data$"height" !=888 |data$"BMI" !=888) 
-              data$Anthropometry[idx]<- "Data available"
-              #-------------------------------
-              data$"Hormone use"<- "missing"
-              idx = which(data$"OCEver"!=888 |data$"OCCurrent" !=888 |data$"OCMo" !=888|
-                          data$"HRTEver"!=888 |data$"HRTCurrent" !=888 |data$"EPEver" !=888| 
-                          data$"EPCurrent"!=888 |data$"EPMo" !=888 |data$"ECurrent" !=888| 
-                          data$"EMo"!=888)
-              data$"Hormone use"[idx]<- "Data available"
-              #-------------------------------
-              data$"Detailed family history"<- "missing"
-              idx = which(data$"sisters"!=888 |data$"brCancerSis" !=888 |data$"ovCancerSis" !=888|
-                          data$"daughters"!=888 |data$"brCancerDau" !=888 |data$"ovCancerDau" !=888| 
-                          data$"brCancerMom"!=888 |data$"ovCancerMom" !=888 |data$"brCancerDad" !=888| 
-                          data$"FHisFstBC"!=888 |data$"FHisFstBCNr" !=888 |data$"FHisSecBC" !=888| 
-                          data$"FHisSecBCNr"!=888 |data$"FHisFstOC" !=888 |data$"FHisFstOCNr" !=888|                             
-                          data$"HRTEver"!=888 |data$"HRTCurrent" !=888 |data$"EPEver" !=888| 
-                          data$"FHisSecOC"!=888 |data$"FHisSecOCNr" !=888 |data$"fam1grBC50" !=888| 
-                          data$"fam1grOC50"!=888)
-              data$"Detailed family history"[idx]<- "Data available"
-              #-------------------------------
-              data$"Benign breast disease"<- "missing"
-              idx = which(data$"Biopsies_number"!=888 |data$"BBD_history" !=888 |data$"BBD_number" !=888|
-                            data$"BBD_type1"!=888)
-              data$"Benign breast disease"[idx]<- "Data available"
-              #-------------------------------
-              data$"Mode of detection"<- "missing"
-              idx = which(data$"Screen_ever"!=888 |data$"Last_screen_year" !=888 |data$"Last_screen_month" !=888|
-                            data$"Detection_screen"!=888 | data$"Detection_detailed"!=888)
-              data$"Mode of detection"[idx]<- "Data available"
-              #------------------------------------------------------------------------ 
-              
-              variables<- c("Lifestyle","Reproductive history","Anthropometry","Hormone use",
-                            "Detailed family history","Benign breast disease","Mode of detection",
-                            "status","ageInt", "sex","ethnicityClass","famHist",
+              #----------------------------------------------------------------------------------
+              variables<- c("status","ageInt", "sex","ethnicityClass","famHist",
                             "fhscore","ER_statusIndex")
               variables2<- colnames(data)
               matches<-character()
@@ -439,7 +390,6 @@ MAKE.MISS.STAT <-function(data){
               # Make binary dummy columns (1s,0s)------------------------------------------------
               results <- fastDummies::dummy_cols(newdata, remove_selected_columns = TRUE)
               
-              
               # Remove "missing" columns---------------------------------------------------
               results<-results[, -grep("missing$", colnames(results))] 
               print("Missingness results column names")
@@ -448,9 +398,7 @@ MAKE.MISS.STAT <-function(data){
               # Add column with zeros if variable has all missings
               library(tibble)
               cols <- c("fhscore_Data available" = 0, "famHist_Data available"=0, "ER_statusIndex_Data available"=0, 
-                        "sex_Data available"=0, "ageInt_Data available"=0, "Reproductive history_Data available" = 0,
-                        "Lifestyle_Data available"=0,"Anthropometry_Data available"=0,"Detailed family history_Data available"=0,
-                        "Benign breast disease_Data available"=0,"Hormone use_Data available"=0,"Mode of detection_Data available"=0)
+                        "sex_Data available"=0, "ageInt_Data available"=0)
               
               results = add_column(results, !!!cols[setdiff(names(cols), names(results))])
               
@@ -462,14 +410,7 @@ MAKE.MISS.STAT <-function(data){
                   Age="ageInt_Data available",
                   ER_status="ER_statusIndex_Data available",
                   FamHist="famHist_Data available",
-                  Fhscore="fhscore_Data available" ,
-                  Lifestyle= "Lifestyle_Data available",
-                  Anthropometry= "Anthropometry_Data available",
-                  "Reproductive history"= "Reproductive history_Data available",
-                  "Detailed family history"= "Detailed family history_Data available",
-                  "Benign breast disease"="Benign breast disease_Data available",
-                  "Hormone use"="Hormone use_Data available",
-                  "Mode of detection"="Mode of detection_Data available"
+                  Fhscore="fhscore_Data available" 
                 )
               
               
