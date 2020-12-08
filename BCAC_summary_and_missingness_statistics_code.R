@@ -46,11 +46,14 @@
 #[2b] Create MAKE.MISS.STAT function
 
 #--------------------------------------------------------------------------------------------
-# SAVE CONFLUENCE BCAC SUMMARY AND MISSINGNESS STATISTICS DIRECTLY TO BOX USING BOXR
+# INSTRUCTIONS FOR RUNNING THE TWO PROGRAMS AND SAVING TO BOX
 
 #[1c] Read in data
-#[2c] Call summary or missingness statistics functions to create summary and or missingness output dataframes
-#[3c] Save files locally and then upload to corresponding box folders
+    setwd("C:/Users/sandovall2/Documents/SummaryStatJean/testingData1") # Change directory
+    file <- "Confluence_missingness_data20082020_testing.csv" # Change filename
+    data <- data.frame(read.csv(file)) 
+#[2c] Run missingness statistics functions below to create 2 output dataframes
+#[3c] Save dataframes as csv files locally and then upload to corresponding box folders (found at the bottom)
 
 #--------------------------------------------------------------------------------------------
 ###################################### BEGIN SUMMARY STATISTICS CODE ########################
@@ -489,13 +492,6 @@ MAKE.MISS.STAT <-function(data){
   }
 
 ###################################### END MISSINGNESS STATISTICS CODE ###################
-
-###################################### READ INPUT DATA  ######################################
-getwd()
-setwd("C:/Users/sandovall2/Documents/SummaryStatJean/testingData1") # Change directory
-file <- "Confluence_missingness_data20082020_testing.csv" # Change filename
-data <- data.frame(read.csv(file)) 
-
 ############################### RUN SUMMARY STATISTICS AND BEGIN BOX UPLOAD OF RESULTS ##################
 
 
