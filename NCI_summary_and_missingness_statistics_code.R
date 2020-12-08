@@ -174,7 +174,7 @@ MAKE.DF = function(data){
             
             # make EMPTY DATAFRAME (df2) for variables totals
             df2<-data.frame(matrix(nrow= nrow(df1),ncol=16))
-            colnames(df2)<-c("age10:19","age20:29", "age30:39", "age40:49", "age50:59", "age60:69", "age70:79", "age80:89", "age90:99", "ageDK", 
+            colnames(df2)<-c("age10.19","age20.29", "age30.39", "age40.49", "age50.59", "age60.69", "age70.79", "age80.89", "age90.99", "ageDK", 
                              "ER_statusIndex_pos", "ER_statusIndex_neg", "ER_statusIndex_DK", "famHist_yes", "famHist_no", "famHist_DK" 
             ) # "Genotyping_chip_no", "Genotyping_chip_yes") # "ER_statusIndex_NA",
             
