@@ -497,25 +497,23 @@ MAKE.MISS.STAT <-function(box_id){
 
 box_id1= "732212467224"
 
-#box_id2=
-
 # Authenticate user access through boxr
 box_auth(client_id = "627lww8un9twnoa8f9rjvldf7kb56q1m" , client_secret = "gSKdYKLd65aQpZGrq9x4QVUNnn5C8qqm") 
-old_df_summ_stat = box_read(690962125479) # old summstat file, DO NOT CHANGE
 
 # Make one or more summary statistics dataframes and combine with other new files or with the old file
-df1_summ_stat = MAKE.SUMMSTAT(box_id1) # new data - CHANGE BOX ID
-
-df_final_summ_stat = rbind(df1_summ_stat)# old_df_summ_stat,df2_summ_stat,df3_summ_stat) # COMBINE DFs IF MORE THAN ONE or adding to old summary statistics file
+df_final_summ_stat = MAKE.SUMMSTAT(box_id1) # new data - CHANGE BOX ID
 
 # Save dataframe locally as csv
 write.csv(df_final_summ_stat, "BCAC_summary_statistics.csv", row.names = FALSE) # change name
 
-#[9a] Upload the combined file to box using the box file ID of the file to be replaced
+# Upload the file to the BCAC Summary Statistics folder using box
 box_ul(109395301106, file="BCAC_summary_statistics.csv", pb = options()$boxr.progress,description = NULL) # UPLOAD AS NEW BCAC_Summary_statistics.csv - DON'T CHANGE
       
 
 ############################### BEGIN BOX UPLOAD OF MISSINGNESS STATISTICS ##################
+
+# Authenticate user access through boxr
+box_auth(client_id = "627lww8un9twnoa8f9rjvldf7kb56q1m" , client_secret = "gSKdYKLd65aQpZGrq9x4QVUNnn5C8qqm") 
 
 # Make one or more missingness statistics dataframes and combine with other dataframses from new files or with the old missingness file
 df_final_miss_stat = MAKE.MISS.STAT(box_id1) # new data - CHANGE BOX ID
@@ -523,5 +521,5 @@ df_final_miss_stat = MAKE.MISS.STAT(box_id1) # new data - CHANGE BOX ID
 #Save the missingness statistics results locally as csv
 write.csv(df_final_miss_stat,"BCAC_missingness_statistics.csv",row.names = FALSE)
 
-#[9a] Upload the file to box using the box folder ID of the BCAC summary and missingness statistics
+# Upload the file to the BCAC Missingness Statistics folder using box
 box_ul(120546599056, file="BCAC_missingness_statistics.csv", pb = options()$boxr.progress,description = NULL) # UPLOAD AS NEW BCAC_missingness_statistics.csv - DON'T CHANGE
