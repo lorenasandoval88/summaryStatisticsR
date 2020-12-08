@@ -448,7 +448,7 @@ MAKE.MISS.STAT <-function(data){
               # Add column with zeros if variable has all missings
               library(tibble)
               cols <- c("fhscore_Data available" = 0, "famHist_Data available"=0, "ER_statusIndex_Data available"=0, 
-                        "sex_Data available"=0, "ageInt_Data available"=0, "Reproductive history" = 0,
+                        "sex_Data available"=0, "ageInt_Data available"=0, "Reproductive history_Data available" = 0,
                         "Lifestyle_Data available"=0,"Anthropometry_Data available"=0,"Detailed family history_Data available"=0,
                         "Benign breast disease_Data available"=0,"Hormone use_Data available"=0,"Mode of detection_Data available"=0)
               
