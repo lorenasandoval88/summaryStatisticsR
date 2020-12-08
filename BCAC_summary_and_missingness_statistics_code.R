@@ -48,9 +48,9 @@
 #--------------------------------------------------------------------------------------------
 # SAVE CONFLUENCE BCAC SUMMARY AND MISSINGNESS STATISTICS DIRECTLY TO BOX USING BOXR
 
-#[1c] Call summary or missingness statistics functions to create summary and or missingness output dataframes
-#[2c] If adding new studies to the current statistics, used old_df to refer to the previous statistics file and combine with new df1, df2, etc
-#[3c] If making statistics file from completely new data, use df1, df2, etc and combine them using r bind
+#[1c] Read in data
+#[2c] Call summary or missingness statistics functions to create summary and or missingness output dataframes
+#[3c] Save files locally and then upload to corresponding box folders
 
 #--------------------------------------------------------------------------------------------
 ###################################### BEGIN SUMMARY STATISTICS CODE ########################
@@ -66,11 +66,8 @@ library(tibble)
 
 
 #[3a] Function to read box IDs
-READ.DATA= function(box_id){
+READ.DATA= function(data){
  
-          # Read box id 
-          data = box_read(box_id)
-          
           # Preprocess data: Removing whitespace, rounding "ageInt" decimals down, and correcting "F" turning into FALSE in the "sex" column
           # Fix:  F turns to FALSE in R
           data$sex[data$sex=="FALSE"]<-"F"  
@@ -327,8 +324,7 @@ library(dplyr) #select
 #[2]------------------------------------------------------------------------
 
 
-MAKE.MISS.STAT <-function(box_id){
-              data <- box_read(box_id)
+MAKE.MISS.STAT <-function(data){
               #trim leading and trailing white space from sex column
               trim <- function (x) gsub("^\\s+|\\s+$", "", x)
               data$sex<- trim(data$sex)
@@ -493,15 +489,20 @@ MAKE.MISS.STAT <-function(box_id){
 
 ###################################### END MISSINGNESS STATISTICS CODE ###################
 
-############################### BEGIN BOX UPLOAD OF  SUMMARY STATISTICS ##################
+###################################### READ INPUT DATA  ######################################
+getwd()
+setwd("C:/Users/sandovall2/Documents/SummaryStatJean/testingData1") # Change directory
+file <- "Confluence_missingness_data20082020_testing.csv" # Change filename
+data <- data.frame(read.csv(file)) 
 
-box_id1= "732212467224"
+############################### RUN SUMMARY STATISTICS AND BEGIN BOX UPLOAD OF RESULTS ##################
+
 
 # Authenticate user access through boxr
 box_auth(client_id = "627lww8un9twnoa8f9rjvldf7kb56q1m" , client_secret = "gSKdYKLd65aQpZGrq9x4QVUNnn5C8qqm") 
 
 # Make one or more summary statistics dataframes and combine with other new files or with the old file
-df_final_summ_stat = MAKE.SUMMSTAT(box_id1) # new data - CHANGE BOX ID
+df_final_summ_stat = MAKE.SUMMSTAT(data) # new data - CHANGE BOX ID
 
 # Save dataframe locally as csv
 write.csv(df_final_summ_stat, "BCAC_summary_statistics.csv", row.names = FALSE) # change name
@@ -510,13 +511,13 @@ write.csv(df_final_summ_stat, "BCAC_summary_statistics.csv", row.names = FALSE) 
 box_ul(109395301106, file="BCAC_summary_statistics.csv", pb = options()$boxr.progress,description = NULL) # UPLOAD AS NEW BCAC_Summary_statistics.csv - DON'T CHANGE
       
 
-############################### BEGIN BOX UPLOAD OF MISSINGNESS STATISTICS ##################
+############################### RUN MISSINGNESS STATISTICS AND BEGIN BOX UPLOAD OF RESULTS ##################
 
 # Authenticate user access through boxr
 box_auth(client_id = "627lww8un9twnoa8f9rjvldf7kb56q1m" , client_secret = "gSKdYKLd65aQpZGrq9x4QVUNnn5C8qqm") 
 
 # Make one or more missingness statistics dataframes and combine with other dataframses from new files or with the old missingness file
-df_final_miss_stat = MAKE.MISS.STAT(box_id1) # new data - CHANGE BOX ID
+df_final_miss_stat = MAKE.MISS.STAT(data) # new data - CHANGE BOX ID
 
 #Save the missingness statistics results locally as csv
 write.csv(df_final_miss_stat,"BCAC_missingness_statistics.csv",row.names = FALSE)
