@@ -9,12 +9,9 @@
 #          ON THE CONFLUENCE DATA PLATFORM'S (https://episphere.github.io/confluence/?#) PUBLIC LANDING PAGE
 #          AND THE DATA EXPLORE PAGE.
 
-# INPUT REQUIREMENTS: Match variables by letter and casing:"study" , "status",  "sex" , "ageInt" , "fhscore" , "fhnumber" , "famHist" , "ER_statusIndex", "Genotyping_chip", "ethnicityClass", "studyDesign"
-
-# Input options for studyDesign:
+# INPUT COLUMN REQUIREMENTS: Match by letter and casing:"study" , "status",  "sex" , "ageInt" , "fhscore" , "fhnumber" , "famHist" , "ER_statusIndex", "Genotyping_chip", "ethnicityClass", "studyDesign"
 
 # Input for studyDesign:
-# Here is the update values for StudyDesign:
 # 1) "Nested case-control": a case-control study nested in a prospective cohort study
 # 2) "Population-based case-control studies": eligible cases are all (or a random sample of) cases occurring in a geographically defined population during a specified period, and controls are a random sample of the same source population as cases, recruited during the same period
 # 3) "Hospital-based case-control": eligible cases are all cases diagnosed in a given hospital or hospitals during a specified period of time,and controls are either population-based controls selected from the catchment area of cases during the same period of time OR, for example, hospital-based controls, with appropriate selection criteria 
@@ -38,7 +35,7 @@
 # PURPOSE: TO GENERATE CSV FILE THAT CONTAINS BINARY DATA OF PRESENT/ABSENT CONFLUENCE CORE VARIABLES THAT ARE
 #          DISPLAYED ON THE CONFLUENCE DATA PLATFORM'S (https://episphere.github.io/confluence/?#) DATA EXPLORE PAGE.
 
-# INPUT REQUIREMENTS: Match variables by letter and casing: "status","ageInt", "sex","ethnicityClass","famHist","fhscore","ER_statusIndex"
+# INPUT COLUMN REQUIREMENTS: Match by letter and casing: "status","ageInt", "sex","ethnicityClass","famHist","fhscore","ER_statusIndex"
 
 # DETAILED EXPLANATION OF MISSINGNESS STATISTICS:
 
