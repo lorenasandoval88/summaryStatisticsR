@@ -509,10 +509,10 @@ df1_summ_stat = MAKE.SUMMSTAT(box_id1) # new data - CHANGE BOX ID
 df_final_summ_stat = rbind(df1_summ_stat)# old_df_summ_stat,df2_summ_stat,df3_summ_stat) # COMBINE DFs IF MORE THAN ONE or adding to old summary statistics file
 
 # Save dataframe locally as csv
-write.csv(df_final_summ_stat, "BCAC_Summary_Statistics.csv", row.names = FALSE) # change name
+write.csv(df_final_summ_stat, "BCAC_summary_statistics.csv", row.names = FALSE) # change name
 
 #[9a] Upload the combined file to box using the box file ID of the file to be replaced
-box_ul(109395301106, file="BCAC_Summary_Statistics.csv", pb = options()$boxr.progress,description = NULL) # UPLOAD AS NEW BCAC_Summary_statistics.csv - DON'T CHANGE
+box_ul(109395301106, file="BCAC_summary_statistics.csv", pb = options()$boxr.progress,description = NULL) # UPLOAD AS NEW BCAC_Summary_statistics.csv - DON'T CHANGE
       
 
 ############################### BEGIN BOX UPLOAD OF MISSINGNESS STATISTICS ##################
@@ -521,7 +521,7 @@ box_ul(109395301106, file="BCAC_Summary_Statistics.csv", pb = options()$boxr.pro
 df_final_miss_stat = MAKE.MISS.STAT(box_id1) # new data - CHANGE BOX ID
 
 #Save the missingness statistics results locally as csv
-write.csv(df_final_miss_stat,"BCAC_Missingness_Statistics.csv",row.names = FALSE)
+write.csv(df_final_miss_stat,"BCAC_missingness_statistics.csv",row.names = FALSE)
 
 #[9a] Upload the file to box using the box folder ID of the BCAC summary and missingness statistics
-box_ul(109395301106, file="BCAC_Missingness_Statistics.csv", pb = options()$boxr.progress,description = NULL) # UPLOAD AS NEW BCAC_missingness_statistics.csv - DON'T CHANGE
+box_ul(120546599056, file="BCAC_missingness_statistics.csv", pb = options()$boxr.progress,description = NULL) # UPLOAD AS NEW BCAC_missingness_statistics.csv - DON'T CHANGE
