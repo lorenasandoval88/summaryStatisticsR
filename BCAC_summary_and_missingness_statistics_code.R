@@ -52,7 +52,7 @@
     setwd("C:/Users/sandovall2/Documents/SummaryStatJean/testingData1") # Change directory
     file <- "Confluence_missingness_data20082020_testing.csv" # Change filename
     data <- data.frame(read.csv(file)) 
-#[2c] Run missingness statistics functions below to create 2 output dataframes
+#[2c] Run summary and missingness statistics functions below to create 2 output dataframes
 #[3c] Save dataframes as csv files locally and then upload to corresponding box folders (found at the bottom)
 
 #--------------------------------------------------------------------------------------------
