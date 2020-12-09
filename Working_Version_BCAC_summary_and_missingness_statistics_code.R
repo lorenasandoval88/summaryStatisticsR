@@ -373,7 +373,7 @@ MAKE.MISS.STAT <-function(data){
               
               # risk factor broad categories-------------------------------
               data$Lifestyle<- "missing"
-              idx = which(data$"eduCat"!=888 | !is.na(data$"eduComments") |
+              idx = which(data$"eduCat"!=888 |  data$"eduComments" != 888 |   # !is.na(data$"eduComments") |
                             data$"alcoholFreq" !=888|data$"alcoholCum" !=888 |
                             data$"smokingEver" !=888| data$"SmoRegStartAge"!=888)
               data$Lifestyle[idx] ="Data available"
@@ -414,8 +414,8 @@ MAKE.MISS.STAT <-function(data){
               data$"Benign breast disease"[idx]<- "Data available"
               #-------------------------------
               data$"Mode of detection"<- "missing"
-              idx = which(data$"Screen_ever"!=888 |data$"Last_screen_year" !=888 |data$"Last_screen_month" !=888|
-                            data$"Detection_screen"!=888 | data$"Detection_detailed"!=888)
+              idx = which(data$"Screen_ever"!=888 |data$"Last_screen_year" != 888 |data$"Last_screen_month" !=888|
+                            data$"Detection_screen"!=888 | data$"Detection_detailed" !=888)
               data$"Mode of detection"[idx]<- "Data available"
               #------------------------------------------------------------------------ 
               
