@@ -46,19 +46,19 @@
 # INSTRUCTIONS FOR RUNNING THE TWO PROGRAMS AND SAVING TO BOX
 
 #[1c] Read in data
-    setwd("C:/Users/sandovall2/Downloads") # Change directory
-    file <- "confluence_missingness_data_testing[7].csv" # Change filename
-    input_data <- data.frame(read.csv(file)) 
-    
+setwd("C:/Users/sandovall2/Downloads") # Change directory
+file <- "confluence_missingness_data_testing[7].csv" # Change filename
+input_data <- data.frame(read.csv(file)) 
+
 #[2c] Run summary and missingness statistics functions below to create 2 output dataframes
 #[3c] Save dataframes as csv files locally and then upload to corresponding box folders (found at the bottom)
 
 #--------------------------------------------------------------------------------------------
 ###################################### BEGIN SUMMARY STATISTICS CODE ########################
 #[1a]
-install.packages("expss")
-install.packages(c("boxr", "base", "usethis"))
-install.packages("dplyr")
+# install.packages("expss")
+# install.packages(c("boxr", "base", "usethis"))
+# install.packages("dplyr")
 library(boxr)
 library(expss) #count_if function
 library(dplyr)
@@ -67,36 +67,36 @@ library(tibble)
 
 
 #[3a] Function to read box IDs
-READ.DATA= function(input_data){
- 
-          # Preprocess data: Removing whitespace, rounding "ageInt" decimals down, and correcting "F" turning into FALSE in the "sex" column
-          # Fix:  F turns to FALSE in R
-          data$sex[data$sex=="FALSE"]<-"F"  
-          
-          # Remove leading or trailing white space from each column using the following "trim function
-          trim <- function (x) gsub("^\\s+|\\s+$", "", x) 
-          data$study<- trim(data$study)
-          data$status<- trim(data$status)
-          data$sex<- trim(data$sex)
-          data$ageInt<- trim(data$ageInt)
-          data$fhscore<- trim(data$fhscore)
-          data$fhnumber<- trim(data$fhnumber)
-          data$famHist<- trim(data$famHist)
-          data$ER_statusIndex<- trim(data$ER_statusIndex)
-          data$Genotyping_chip<- trim(data$Genotyping_chip)
-          data$ethnicityClass<- trim(data$ethnicityClass)
-          
-          # Round ageInt numbers down
-          data$ageInt<-floor(as.numeric(data$ageInt))
-          
-          # Get study names into a list
-          study_name<- factor(data$study)
-          study_name= levels(study_name)
-          
-          # Convert all case types to 1
-          data$status[data$status!=0] <-1
-          return(data)
-      }
+READ.DATA= function(data){
+  
+  # Preprocess data: Removing whitespace, rounding "ageInt" decimals down, and correcting "F" turning into FALSE in the "sex" column
+  # Fix:  F turns to FALSE in R
+  data$sex[data$sex=="FALSE"]<-"F"  
+  
+  # Remove leading or trailing white space from each column using the following "trim function
+  trim <- function (x) gsub("^\\s+|\\s+$", "", x) 
+  data$study<- trim(data$study)
+  data$status<- trim(data$status)
+  data$sex<- trim(data$sex)
+  data$ageInt<- trim(data$ageInt)
+  data$fhscore<- trim(data$fhscore)
+  data$fhnumber<- trim(data$fhnumber)
+  data$famHist<- trim(data$famHist)
+  data$ER_statusIndex<- trim(data$ER_statusIndex)
+  data$Genotyping_chip<- trim(data$Genotyping_chip)
+  data$ethnicityClass<- trim(data$ethnicityClass)
+  
+  # Round ageInt numbers down
+  data$ageInt<-floor(as.numeric(data$ageInt))
+  
+  # Get study names into a list
+  study_name<- factor(data$study)
+  study_name= levels(study_name)
+  
+  # Convert all case types to 1
+  data$status[data$status!=0] <-1
+  return(data)
+}
 
 
 #[4a] Function used ADD.DATA function to read fill ages columns ---------------------------------------------------------------------------------------
@@ -115,7 +115,7 @@ READ.AGE = function(data, chip2, study2, status2, ethnicityClass2, sex2, ageRang
 MAKE.DF = function(data){
   
   # Define function variables
-
+  
   study_name = factor(data$study)
   study_name = levels(study_name)
   
@@ -164,107 +164,107 @@ MAKE.DF = function(data){
 
 #[6a] FUnction to fill in empty dataframe----------------------------------------------------------------------------------------------------------
 ADD.DATA <- function (data, df){
-        row= 1
-        study_name = factor(data$study)
-        study_name = levels(study_name)
-        chip_name= c("Confluence chip","Other chip")
-        chip_num= c(1,0)
-        # add studyDesign later on. Will manually add for now. 
-        #studyDesign_name= c("Nested case-control","Population-based case-control","Hospital-based case-control","Mixed","Case-series")
-        #studyDesign_num= c(1,2,3,4,5)
-        status_name= c("case", "control")
-        status_num= c(1,0)
-        eth_name= c("European", "Hispanic", "African", "Asian", "South East Asian", "Other", "don't know")
-        eth_num = c(1,2,3,4,5,6,888)
-        fHist_name= c("no","yes", "don't know")
-        fHist_num= c(0, 1, 888)
-        ER_name= c("negative", "positive", "don't know", "blank")
-        ER_num= c(0, 1,888, NA)
-        sex_name= c("female", "male", "unknown")
-        sex_num= c("F", "M", "U")
-        
-        chip1 <- setNames(as.list(chip_num), chip_name)
-        #studyDesign1 <- setNames(as.list(studyDesign_name), studyDesign_num) #reverse from rest
-        status1 <- setNames(as.list(status_num), status_name)
-        ethnicityClass1 <- setNames(as.list(eth_num), eth_name)
-        fHist1 <- setNames(as.list(fHist_num), fHist_name)
-        ER1 <- setNames(as.list(ER_num), ER_name)
-        sex1 <- setNames(as.list(sex_num), sex_name)
-        
-        ## Define subclasses: status ,study, chip, ethnicity
-        sex <- character()
-        status <- character()
-        ethnicityClass <- character()
-        study <- character()
-        chip<- character()
-        study_name = factor(data$study)
-        study_name = levels(study_name)
-        
-        while(row<28){
-          for (d in chip_name){
-            for (e in study_name){
-              for (a in eth_name){
-                for (b in status_name){
-                  for (c in sex_name){
-                    
-                    #-----add studyDesign rows
-                    st=filter(data, study==e,studyDesign !=777,studyDesign !=888)
-                    st1=levels(factor(st$studyDesign))
-                    st2= paste(st1,sep="")
-                    # if(length(st1)==1){
-                    #        st2= paste(st1,sep="")
-                    #   }else if(length(st1>1)){
-                    #        st2= paste(555,sep="")
-                    #   }else {paste(666, sep = "")}
-                    
-                    #df[row,4]<- studyDesign1[[st2]]
-                    df[row,4]<- st1
-                    
-                    #-----add status Totals
-                    statusTotal<- nrow(filter(data,Genotyping_chip==chip1[[d]],study==e,status ==status1[[b]], ethnicityClass==ethnicityClass1[[a]], sex==sex1[[c]]))
-                    df[row,8]<- statusTotal
-                    
-                    #-----add age data
-                    age10s<- READ.AGE(data, chip1[[d]], e, status1[[b]], ethnicityClass1[[a]], sex1[[c]], ageRange = 10:19 )
-                    df[row,9]<- age10s
-                    age20s<- READ.AGE(data, chip1[[d]], e, status1[[b]], ethnicityClass1[[a]], sex1[[c]], ageRange = 20:29 )
-                    df[row,10]<- age20s
-                    age30s<- READ.AGE(data, chip1[[d]],e,status1[[b]], ethnicityClass1[[a]], sex1[[c]],ageRange = 30:39 )
-                    df[row,11]<- age30s
-                    age40s<- READ.AGE(data, chip1[[d]],e,status1[[b]], ethnicityClass1[[a]], sex1[[c]],ageRange = 40:49 )
-                    df[row,12]<- age40s
-                    age50s<- READ.AGE(data, chip1[[d]],e,status1[[b]], ethnicityClass1[[a]], sex1[[c]],ageRange = 50:59 )
-                    df[row,13]<- age50s
-                    age60s<- READ.AGE(data, chip1[[d]],e , status1[[b]], ethnicityClass1[[a]], sex1[[c]],ageRange = 60:69 )
-                    df[row,14]<- age60s
-                    age70s<- READ.AGE(data, chip1[[d]],e,status1[[b]], ethnicityClass1[[a]], sex1[[c]],ageRange = 70:79 )
-                    df[row,15]<- age70s
-                    age80s<- READ.AGE(data, chip1[[d]],e,status1[[b]], ethnicityClass1[[a]], sex1[[c]],ageRange = 80:89 )
-                    df[row,16]<- age80s
-                    age90s<- READ.AGE(data, chip1[[d]],e,status1[[b]], ethnicityClass1[[a]], sex1[[c]],ageRange = 90:99 )
-                    df[row,17]<- age90s
-                    ageDK<- nrow(filter(data, Genotyping_chip==chip1[[d]],study==e, status ==status1[[b]], ethnicityClass==ethnicityClass1[[a]],sex==sex1[[c]],  ageInt ==888 ))
-                    df[row,18]<- ageDK
-                    
-                    #-----add ER data (positive, negative, don't know, blank)
-                    ER_pos<-nrow(filter(data, Genotyping_chip==chip1[[d]],study==e, status ==status1[[b]],ethnicityClass==ethnicityClass1[[a]],sex==sex1[[c]],  ER_statusIndex ==1 ))
-                    df[row,19]<- ER_pos
-                    ER_neg<-nrow(filter(data, Genotyping_chip==chip1[[d]],study==e, status ==status1[[b]],ethnicityClass==ethnicityClass1[[a]],sex==sex1[[c]],  ER_statusIndex ==0 ))
-                    df[row,20]<- ER_neg
-                    ER_DK<-nrow(filter(data, Genotyping_chip==chip1[[d]],study==e, status ==status1[[b]],ethnicityClass==ethnicityClass1[[a]],sex==sex1[[c]],  ER_statusIndex ==888 ))
-                    df[row,21]<- ER_DK
-                    # ER_NA<-nrow(filter(data, Genotyping_chip==chip1[[d]],study==e, status ==status1[[b]] & ethnicityClass==ethnicityClass1[[a]],sex==sex1[[c]],  is.na(ER_statusIndex )))
-                    # df[row,20]<- ER_NA
-                    #-----add family history data (yes, no, don't know)
-                    fHist_yes<-nrow(filter(data, Genotyping_chip==chip1[[d]],study==e, status ==status1[[b]], ethnicityClass==ethnicityClass1[[a]],sex==sex1[[c]],  famHist ==1 ))
-                    df[row,22]<- fHist_yes
-                    fHist_no<-nrow(filter(data, Genotyping_chip==chip1[[d]],study==e, status ==status1[[b]] ,ethnicityClass==ethnicityClass1[[a]],sex==sex1[[c]],  famHist==0 ))
-                    df[row,23]<- fHist_no
-                    fHist_DK<-nrow(filter(data, Genotyping_chip==chip1[[d]],study==e,  status ==status1[[b]], ethnicityClass==ethnicityClass1[[a]],sex==sex1[[c]],  famHist ==888 ))
-                    df[row,24]<- fHist_DK
-                    
-                    #print(row)
-                    row = row+1
+  row= 1
+  study_name = factor(data$study)
+  study_name = levels(study_name)
+  chip_name= c("Confluence chip","Other chip")
+  chip_num= c(1,0)
+  # add studyDesign later on. Will manually add for now. 
+  #studyDesign_name= c("Nested case-control","Population-based case-control","Hospital-based case-control","Mixed","Case-series")
+  #studyDesign_num= c(1,2,3,4,5)
+  status_name= c("case", "control")
+  status_num= c(1,0)
+  eth_name= c("European", "Hispanic", "African", "Asian", "South East Asian", "Other", "don't know")
+  eth_num = c(1,2,3,4,5,6,888)
+  fHist_name= c("no","yes", "don't know")
+  fHist_num= c(0, 1, 888)
+  ER_name= c("negative", "positive", "don't know", "blank")
+  ER_num= c(0, 1,888, NA)
+  sex_name= c("female", "male", "unknown")
+  sex_num= c("F", "M", "U")
+  
+  chip1 <- setNames(as.list(chip_num), chip_name)
+  #studyDesign1 <- setNames(as.list(studyDesign_name), studyDesign_num) #reverse from rest
+  status1 <- setNames(as.list(status_num), status_name)
+  ethnicityClass1 <- setNames(as.list(eth_num), eth_name)
+  fHist1 <- setNames(as.list(fHist_num), fHist_name)
+  ER1 <- setNames(as.list(ER_num), ER_name)
+  sex1 <- setNames(as.list(sex_num), sex_name)
+  
+  ## Define subclasses: status ,study, chip, ethnicity
+  sex <- character()
+  status <- character()
+  ethnicityClass <- character()
+  study <- character()
+  chip<- character()
+  study_name = factor(data$study)
+  study_name = levels(study_name)
+  
+  while(row<28){
+    for (d in chip_name){
+      for (e in study_name){
+        for (a in eth_name){
+          for (b in status_name){
+            for (c in sex_name){
+              
+              #-----add studyDesign rows
+              st=filter(data, study==e,studyDesign !=777,studyDesign !=888)
+              st1=levels(factor(st$studyDesign))
+              st2= paste(st1,sep="")
+              # if(length(st1)==1){
+              #        st2= paste(st1,sep="")
+              #   }else if(length(st1>1)){
+              #        st2= paste(555,sep="")
+              #   }else {paste(666, sep = "")}
+              
+              #df[row,4]<- studyDesign1[[st2]]
+              df[row,4]<- st1
+              
+              #-----add status Totals
+              statusTotal<- nrow(filter(data,Genotyping_chip==chip1[[d]],study==e,status ==status1[[b]], ethnicityClass==ethnicityClass1[[a]], sex==sex1[[c]]))
+              df[row,8]<- statusTotal
+              
+              #-----add age data
+              age10s<- READ.AGE(data, chip1[[d]], e, status1[[b]], ethnicityClass1[[a]], sex1[[c]], ageRange = 10:19 )
+              df[row,9]<- age10s
+              age20s<- READ.AGE(data, chip1[[d]], e, status1[[b]], ethnicityClass1[[a]], sex1[[c]], ageRange = 20:29 )
+              df[row,10]<- age20s
+              age30s<- READ.AGE(data, chip1[[d]],e,status1[[b]], ethnicityClass1[[a]], sex1[[c]],ageRange = 30:39 )
+              df[row,11]<- age30s
+              age40s<- READ.AGE(data, chip1[[d]],e,status1[[b]], ethnicityClass1[[a]], sex1[[c]],ageRange = 40:49 )
+              df[row,12]<- age40s
+              age50s<- READ.AGE(data, chip1[[d]],e,status1[[b]], ethnicityClass1[[a]], sex1[[c]],ageRange = 50:59 )
+              df[row,13]<- age50s
+              age60s<- READ.AGE(data, chip1[[d]],e , status1[[b]], ethnicityClass1[[a]], sex1[[c]],ageRange = 60:69 )
+              df[row,14]<- age60s
+              age70s<- READ.AGE(data, chip1[[d]],e,status1[[b]], ethnicityClass1[[a]], sex1[[c]],ageRange = 70:79 )
+              df[row,15]<- age70s
+              age80s<- READ.AGE(data, chip1[[d]],e,status1[[b]], ethnicityClass1[[a]], sex1[[c]],ageRange = 80:89 )
+              df[row,16]<- age80s
+              age90s<- READ.AGE(data, chip1[[d]],e,status1[[b]], ethnicityClass1[[a]], sex1[[c]],ageRange = 90:99 )
+              df[row,17]<- age90s
+              ageDK<- nrow(filter(data, Genotyping_chip==chip1[[d]],study==e, status ==status1[[b]], ethnicityClass==ethnicityClass1[[a]],sex==sex1[[c]],  ageInt ==888 ))
+              df[row,18]<- ageDK
+              
+              #-----add ER data (positive, negative, don't know, blank)
+              ER_pos<-nrow(filter(data, Genotyping_chip==chip1[[d]],study==e, status ==status1[[b]],ethnicityClass==ethnicityClass1[[a]],sex==sex1[[c]],  ER_statusIndex ==1 ))
+              df[row,19]<- ER_pos
+              ER_neg<-nrow(filter(data, Genotyping_chip==chip1[[d]],study==e, status ==status1[[b]],ethnicityClass==ethnicityClass1[[a]],sex==sex1[[c]],  ER_statusIndex ==0 ))
+              df[row,20]<- ER_neg
+              ER_DK<-nrow(filter(data, Genotyping_chip==chip1[[d]],study==e, status ==status1[[b]],ethnicityClass==ethnicityClass1[[a]],sex==sex1[[c]],  ER_statusIndex ==888 ))
+              df[row,21]<- ER_DK
+              # ER_NA<-nrow(filter(data, Genotyping_chip==chip1[[d]],study==e, status ==status1[[b]] & ethnicityClass==ethnicityClass1[[a]],sex==sex1[[c]],  is.na(ER_statusIndex )))
+              # df[row,20]<- ER_NA
+              #-----add family history data (yes, no, don't know)
+              fHist_yes<-nrow(filter(data, Genotyping_chip==chip1[[d]],study==e, status ==status1[[b]], ethnicityClass==ethnicityClass1[[a]],sex==sex1[[c]],  famHist ==1 ))
+              df[row,22]<- fHist_yes
+              fHist_no<-nrow(filter(data, Genotyping_chip==chip1[[d]],study==e, status ==status1[[b]] ,ethnicityClass==ethnicityClass1[[a]],sex==sex1[[c]],  famHist==0 ))
+              df[row,23]<- fHist_no
+              fHist_DK<-nrow(filter(data, Genotyping_chip==chip1[[d]],study==e,  status ==status1[[b]], ethnicityClass==ethnicityClass1[[a]],sex==sex1[[c]],  famHist ==888 ))
+              df[row,24]<- fHist_DK
+              
+              #print(row)
+              row = row+1
             }
           }
         }
@@ -276,23 +276,23 @@ ADD.DATA <- function (data, df){
 #[7a] Function to run Summary statistics 
 
 MAKE.SUMMSTAT = function(input_data){
-                    
-                    data = READ.DATA(input_data)
-                    empty_df = MAKE.DF(data) # uses READ.AGE function
-                    df = ADD.DATA(data, empty_df)
-                    return(df)
-                    }
-                    
+  
+  data = READ.DATA(input_data)
+  empty_df = MAKE.DF(data) # uses READ.AGE function
+  df = ADD.DATA(data, empty_df)
+  return(df)
+}
+
 ###################################### END SUMMARY STATISTICS CODE ##################################################
 ###################################### BEGIN MISSINGNESS STATISTICS CODE ############################################
 
 #[1]------------------------------------------------------------------------
-install.packages("fastDummies")
-install.packages("stringi")
-install.packages(c("boxr", "base", "usethis"))
-install.packages("tidyverse")
-install.packages("tibble")
-install.packages("dplyr")
+# install.packages("fastDummies")
+# install.packages("stringi")
+# install.packages(c("boxr", "base", "usethis"))
+# install.packages("tidyverse")
+# install.packages("tibble")
+# install.packages("dplyr")
 library(fastDummies)
 library(stringi)
 library(boxr)
@@ -304,109 +304,109 @@ library(dplyr) #select
 
 
 MAKE.MISS.STAT <-function(data){
-              #trim leading and trailing white space from sex column
-              trim <- function (x) gsub("^\\s+|\\s+$", "", x)
-              data$sex<- trim(data$sex)
-              data$sex[data$sex=="FALSE"]<-"F"  #fix when F turns into FALSE
-              
-              # Replace numbers with word definitions from confluence data dictionary
-              data$status[data$status==0] <-"control"
-              data$status[data$status==1] <-"case"
-              data$status[data$status==2] <-"case"
-              data$status[data$status==3] <-"case"
-              data$status[data$status==9] <-"missing" #check with Montse (BCAC CIMBA) , drop 9? ask Jean, add to QAQC?
-              
-              #If input has blanks, replace with 888
-              data$ethnicityClass[is.na(data$ethnicityClass)]<- 888
-              data$ethnicityClass[data$ethnicityClass==1] <-"European"
-              data$ethnicityClass[data$ethnicityClass==2] <-"Hispanic" 
-              data$ethnicityClass[data$ethnicityClass==3] <-"African"
-              data$ethnicityClass[data$ethnicityClass==4] <-"Asian Subcontinent"
-              data$ethnicityClass[data$ethnicityClass==5] <-"South-East Asian"
-              data$ethnicityClass[data$ethnicityClass==6] <-"Other"
-              data$ethnicityClass[data$ethnicityClass==888] <-"missing" 
-              
-              data$famHist[data$famHist==0] <-"Data available"
-              data$famHist[data$famHist==1] <-"Data available"
-              data$famHist[data$famHist==888] <-"missing"
-              
-              data$fhscore[data$fhscore!=888] <-"Data available"
-              data$fhscore[data$fhscore == 888] <-"missing"
-              
-              data$fhnumber[data$fhnumber!=888] <-"Data available"
-              data$fhnumber[data$fhnumber==888] <-"missing"
-              
-              #If status is control ER should be NA
-              data$ER_statusIndex[data$status==0]<- NA
-              data$ER_statusIndex[data$ER_statusIndex==0] <-"Data available"
-              data$ER_statusIndex[data$ER_statusIndex==1] <-"Data available"
-              data$ER_statusIndex[data$ER_statusIndex==888] <-"missing"
-              data$ER_statusIndex[is.na(data$ER_statusIndex)] <-"missing"
-              
-              data$sex[data$sex=="M"] <-"Data available"
-              data$sex[data$sex=="F"] <-"Data available"
-              data$sex[data$sex=="U"] <- "missing" 
-              
-              data$ageInt[data$ageInt!=888]<- "Data available"
-              data$ageInt[data$ageInt==888] <-"missing"
-              
-              #----------------------------------------------------------------------------------
-              variables<- c("status","ageInt", "sex","ethnicityClass","famHist",
-                            "fhscore","ER_statusIndex")
-              variables2<- colnames(data)
-              matches<-character()
-              for (i in variables2){
-                for (e in variables){
-                  if (i==e){
-                    #matches[[i]]
-                    print(i)
-                    matches <- append(matches,i)
-                  }
-                }
-              }
-              newdata= data[matches]
-              
-              # Make binary dummy columns (1s,0s)------------------------------------------------
-              results <- fastDummies::dummy_cols(newdata, remove_selected_columns = TRUE)
-              
-              # Remove "missing" columns---------------------------------------------------
-              results<-results[, -grep("missing$", colnames(results))] 
-              print("Missingness results column names")
-              print(colnames(results))
-              
-              # Add column with zeros if variable has all missings
-              library(tibble)
-              cols <- c("fhscore_Data available" = 0, "famHist_Data available"=0, "ER_statusIndex_Data available"=0, 
-                        "sex_Data available"=0, "ageInt_Data available"=0)
-              
-              results = add_column(results, !!!cols[setdiff(names(cols), names(results))])
-              
-              # Rename filtering variables
-
-              results = results %>% 
-                rename(
-                  Sex="sex_Data available",
-                  Age="ageInt_Data available",
-                  ER_status="ER_statusIndex_Data available",
-                  FamHist="famHist_Data available",
-                  Fhscore="fhscore_Data available" 
-                )
-              
-              
-              # Use library(tibble) to add ethnicities not in data
-              cols <- c("ethnicityClass_European" = 0,"ethnicityClass_Hispanic" = 0,
-                        "ethnicityClass_African" = 0,"ethnicityClass_Asian Subcontinent"=0,
-                        "ethnicityClass_South-East Asian"=0,"ethnicityClass_Other"=0)
-              results<-add_column(results, !!!cols[setdiff(names(cols), names(results))])
-              
-              #Add "Consortia" column with consortia name as rows
-              results$Consortia<- "BCAC"
-              colnames(results)
-              
-              #Add study column
-              results$study<- data$study
-              return(results)
+  #trim leading and trailing white space from sex column
+  trim <- function (x) gsub("^\\s+|\\s+$", "", x)
+  data$sex<- trim(data$sex)
+  data$sex[data$sex=="FALSE"]<-"F"  #fix when F turns into FALSE
+  
+  # Replace numbers with word definitions from confluence data dictionary
+  data$status[data$status==0] <-"control"
+  data$status[data$status==1] <-"case"
+  data$status[data$status==2] <-"case"
+  data$status[data$status==3] <-"case"
+  data$status[data$status==9] <-"missing" #check with Montse (BCAC CIMBA) , drop 9? ask Jean, add to QAQC?
+  
+  #If input has blanks, replace with 888
+  data$ethnicityClass[is.na(data$ethnicityClass)]<- 888
+  data$ethnicityClass[data$ethnicityClass==1] <-"European"
+  data$ethnicityClass[data$ethnicityClass==2] <-"Hispanic" 
+  data$ethnicityClass[data$ethnicityClass==3] <-"African"
+  data$ethnicityClass[data$ethnicityClass==4] <-"Asian Subcontinent"
+  data$ethnicityClass[data$ethnicityClass==5] <-"South-East Asian"
+  data$ethnicityClass[data$ethnicityClass==6] <-"Other"
+  data$ethnicityClass[data$ethnicityClass==888] <-"missing" 
+  
+  data$famHist[data$famHist==0] <-"Data available"
+  data$famHist[data$famHist==1] <-"Data available"
+  data$famHist[data$famHist==888] <-"missing"
+  
+  data$fhscore[data$fhscore!=888] <-"Data available"
+  data$fhscore[data$fhscore == 888] <-"missing"
+  
+  data$fhnumber[data$fhnumber!=888] <-"Data available"
+  data$fhnumber[data$fhnumber==888] <-"missing"
+  
+  #If status is control ER should be NA
+  data$ER_statusIndex[data$status==0]<- NA
+  data$ER_statusIndex[data$ER_statusIndex==0] <-"Data available"
+  data$ER_statusIndex[data$ER_statusIndex==1] <-"Data available"
+  data$ER_statusIndex[data$ER_statusIndex==888] <-"missing"
+  data$ER_statusIndex[is.na(data$ER_statusIndex)] <-"missing"
+  
+  data$sex[data$sex=="M"] <-"Data available"
+  data$sex[data$sex=="F"] <-"Data available"
+  data$sex[data$sex=="U"] <- "missing" 
+  
+  data$ageInt[data$ageInt!=888]<- "Data available"
+  data$ageInt[data$ageInt==888] <-"missing"
+  
+  #----------------------------------------------------------------------------------
+  variables<- c("status","ageInt", "sex","ethnicityClass","famHist",
+                "fhscore","ER_statusIndex")
+  variables2<- colnames(data)
+  matches<-character()
+  for (i in variables2){
+    for (e in variables){
+      if (i==e){
+        #matches[[i]]
+        print(i)
+        matches <- append(matches,i)
+      }
+    }
   }
+  newdata= data[matches]
+  
+  # Make binary dummy columns (1s,0s)------------------------------------------------
+  results <- fastDummies::dummy_cols(newdata, remove_selected_columns = TRUE)
+  
+  # Remove "missing" columns---------------------------------------------------
+  results<-results[, -grep("missing$", colnames(results))] 
+  print("Missingness results column names")
+  print(colnames(results))
+  
+  # Add column with zeros if variable has all missings
+  library(tibble)
+  cols <- c("fhscore_Data available" = 0, "famHist_Data available"=0, "ER_statusIndex_Data available"=0, 
+            "sex_Data available"=0, "ageInt_Data available"=0)
+  
+  results = add_column(results, !!!cols[setdiff(names(cols), names(results))])
+  
+  # Rename filtering variables
+  
+  results = results %>% 
+    rename(
+      Sex="sex_Data available",
+      Age="ageInt_Data available",
+      ER_status="ER_statusIndex_Data available",
+      FamHist="famHist_Data available",
+      Fhscore="fhscore_Data available" 
+    )
+  
+  
+  # Use library(tibble) to add ethnicities not in data
+  cols <- c("ethnicityClass_European" = 0,"ethnicityClass_Hispanic" = 0,
+            "ethnicityClass_African" = 0,"ethnicityClass_Asian Subcontinent"=0,
+            "ethnicityClass_South-East Asian"=0,"ethnicityClass_Other"=0)
+  results<-add_column(results, !!!cols[setdiff(names(cols), names(results))])
+  
+  #Add "Consortia" column with consortia name as rows
+  results$Consortia<- "BCAC"
+  colnames(results)
+  
+  #Add study column
+  results$study<- data$study
+  return(results)
+}
 
 ###################################### END MISSINGNESS STATISTICS CODE ###################
 ############################### RUN SUMMARY STATISTICS AND BEGIN BOX UPLOAD OF RESULTS ##################
@@ -415,7 +415,7 @@ MAKE.MISS.STAT <-function(data){
 # Authenticate user access through boxr
 box_auth(client_id = "627lww8un9twnoa8f9rjvldf7kb56q1m" , client_secret = "gSKdYKLd65aQpZGrq9x4QVUNnn5C8qqm") 
 
-# Make one or more summary statistics dataframes and combine with other new files or with the old file
+# Make one or more summary statistics dataframes 
 summ_stat = MAKE.SUMMSTAT(input_data) 
 
 # Save dataframe locally as csv
@@ -423,7 +423,7 @@ write.csv(summ_stat, "BCAC_summary_statistics.csv", row.names = FALSE) # change 
 
 # Upload the file to the BCAC Summary Statistics folder using box
 box_ul(109395301106, file="BCAC_summary_statistics.csv", pb = options()$boxr.progress,description = NULL) # UPLOAD AS NEW BCAC_Summary_statistics.csv - DON'T CHANGE
-      
+
 
 ############################### RUN MISSINGNESS STATISTICS AND BEGIN BOX UPLOAD OF RESULTS ##################
 
