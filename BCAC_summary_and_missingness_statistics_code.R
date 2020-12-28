@@ -115,7 +115,10 @@ READ.AGE = function(data, chip2, study2, status2, ethnicityClass2, sex2, ageRang
 MAKE.DF = function(data){
   
   # Define function variables
-  
+  chip_name= c("Confluence chip","Other chip")
+  status_name= c("case", "control")
+  eth_name= c("European", "Hispanic", "African", "Asian", "South East Asian", "Other", "don't know")
+  sex_name= c("female", "male", "unknown")
   study_name = factor(data$study)
   study_name = levels(study_name)
   
