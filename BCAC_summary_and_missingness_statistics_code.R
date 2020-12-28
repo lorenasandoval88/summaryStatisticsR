@@ -46,9 +46,10 @@
 # INSTRUCTIONS FOR RUNNING THE TWO PROGRAMS AND SAVING TO BOX
 
 #[1c] Read in data
-    setwd("C:/Users/sandovall2/Documents/SummaryStatJean/testingData1") # Change directory
-    file <- "Confluence_missingness_data20082020_testing.csv" # Change filename
-    data <- data.frame(read.csv(file)) 
+    setwd("C:/Users/sandovall2/Downloads") # Change directory
+    file <- "confluence_missingness_data_testing[7].csv" # Change filename
+    input_data <- data.frame(read.csv(file)) 
+    
 #[2c] Run summary and missingness statistics functions below to create 2 output dataframes
 #[3c] Save dataframes as csv files locally and then upload to corresponding box folders (found at the bottom)
 
@@ -66,7 +67,7 @@ library(tibble)
 
 
 #[3a] Function to read box IDs
-READ.DATA= function(data){
+READ.DATA= function(input_data){
  
           # Preprocess data: Removing whitespace, rounding "ageInt" decimals down, and correcting "F" turning into FALSE in the "sex" column
           # Fix:  F turns to FALSE in R
@@ -118,29 +119,6 @@ MAKE.DF = function(data){
   study_name = factor(data$study)
   study_name = levels(study_name)
   
-  data$status[data$status!=0] <-1
-  
-  chip_name= c("Confluence chip","Other chip")
-  chip_num= c(1,0)
-  studyDesign_name= c("Nested case-control","Population-based case-control","Hospital-based case-control","Mixed","Case-series")
-  studyDesign_num= c(1,2,3,4,5)
-  status_name= c("case", "control")
-  status_num= c(1,0)
-  eth_name= c("European", "Hispanic", "African", "Asian", "South East Asian", "Other", "don't know")
-  eth_num = c(1,2,3,4,5,6,888)
-  fHist_name= c("no","yes", "don't know")
-  fHist_num= c(0, 1, 888)
-  ER_name= c("negative", "positive", "don't know", "blank")
-  ER_num= c(0, 1,888, NA)
-  sex_name= c("female", "male", "unknown")
-  sex_num= c("F", "M", "U")
-  chip1 <- setNames(as.list(chip_num), chip_name)
-  #studyDesign1 <- setNames(as.list(studyDesign_name), studyDesign_num) #reverse from rest
-  status1 <- setNames(as.list(status_num), status_name)
-  ethnicityClass1 <- setNames(as.list(eth_num), eth_name)
-  fHist1 <- setNames(as.list(fHist_num), fHist_name)
-  ER1 <- setNames(as.list(ER_num), ER_name)
-  sex1 <- setNames(as.list(sex_num), sex_name)
   ## Define subclasses: status ,study, chip, ethnicity
   sex <- character()
   status <- character()
@@ -192,8 +170,8 @@ ADD.DATA <- function (data, df){
         chip_name= c("Confluence chip","Other chip")
         chip_num= c(1,0)
         # add studyDesign later on. Will manually add for now. 
-        studyDesign_name= c("Nested case-control","Population-based case-control","Hospital-based case-control","Mixed","Case-series")
-        studyDesign_num= c(1,2,3,4,5)
+        #studyDesign_name= c("Nested case-control","Population-based case-control","Hospital-based case-control","Mixed","Case-series")
+        #studyDesign_num= c(1,2,3,4,5)
         status_name= c("case", "control")
         status_num= c(1,0)
         eth_name= c("European", "Hispanic", "African", "Asian", "South East Asian", "Other", "don't know")
@@ -206,7 +184,7 @@ ADD.DATA <- function (data, df){
         sex_num= c("F", "M", "U")
         
         chip1 <- setNames(as.list(chip_num), chip_name)
-        studyDesign1 <- setNames(as.list(studyDesign_name), studyDesign_num) #reverse from rest
+        #studyDesign1 <- setNames(as.list(studyDesign_name), studyDesign_num) #reverse from rest
         status1 <- setNames(as.list(status_num), status_name)
         ethnicityClass1 <- setNames(as.list(eth_num), eth_name)
         fHist1 <- setNames(as.list(fHist_num), fHist_name)
@@ -239,7 +217,8 @@ ADD.DATA <- function (data, df){
                     #        st2= paste(555,sep="")
                     #   }else {paste(666, sep = "")}
                     
-                    df[row,4]<- studyDesign1[[st2]]
+                    #df[row,4]<- studyDesign1[[st2]]
+                    df[row,4]<- st1
                     
                     #-----add status Totals
                     statusTotal<- nrow(filter(data,Genotyping_chip==chip1[[d]],study==e,status ==status1[[b]], ethnicityClass==ethnicityClass1[[a]], sex==sex1[[c]]))
@@ -296,9 +275,9 @@ ADD.DATA <- function (data, df){
 
 #[7a] Function to run Summary statistics 
 
-MAKE.SUMMSTAT = function(box_id){
+MAKE.SUMMSTAT = function(input_data){
                     
-                    data = READ.DATA(box_id)
+                    data = READ.DATA(input_data)
                     empty_df = MAKE.DF(data) # uses READ.AGE function
                     df = ADD.DATA(data, empty_df)
                     return(df)
@@ -437,7 +416,7 @@ MAKE.MISS.STAT <-function(data){
 box_auth(client_id = "627lww8un9twnoa8f9rjvldf7kb56q1m" , client_secret = "gSKdYKLd65aQpZGrq9x4QVUNnn5C8qqm") 
 
 # Make one or more summary statistics dataframes and combine with other new files or with the old file
-df_final_summ_stat = MAKE.SUMMSTAT(data) # new data - CHANGE BOX ID
+df_final_summ_stat = MAKE.SUMMSTAT(input_data) 
 
 # Save dataframe locally as csv
 write.csv(df_final_summ_stat, "BCAC_summary_statistics.csv", row.names = FALSE) # change name
