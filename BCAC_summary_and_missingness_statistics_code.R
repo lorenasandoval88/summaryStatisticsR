@@ -416,10 +416,10 @@ MAKE.MISS.STAT <-function(data){
 box_auth(client_id = "627lww8un9twnoa8f9rjvldf7kb56q1m" , client_secret = "gSKdYKLd65aQpZGrq9x4QVUNnn5C8qqm") 
 
 # Make one or more summary statistics dataframes and combine with other new files or with the old file
-df_final_summ_stat = MAKE.SUMMSTAT(input_data) 
+summ_stat = MAKE.SUMMSTAT(input_data) 
 
 # Save dataframe locally as csv
-write.csv(df_final_summ_stat, "BCAC_summary_statistics.csv", row.names = FALSE) # change name
+write.csv(summ_stat, "BCAC_summary_statistics.csv", row.names = FALSE) # change name
 
 # Upload the file to the BCAC Summary Statistics folder using box
 box_ul(109395301106, file="BCAC_summary_statistics.csv", pb = options()$boxr.progress,description = NULL) # UPLOAD AS NEW BCAC_Summary_statistics.csv - DON'T CHANGE
@@ -431,10 +431,10 @@ box_ul(109395301106, file="BCAC_summary_statistics.csv", pb = options()$boxr.pro
 box_auth(client_id = "627lww8un9twnoa8f9rjvldf7kb56q1m" , client_secret = "gSKdYKLd65aQpZGrq9x4QVUNnn5C8qqm") 
 
 # Make one or more missingness statistics dataframes and combine with other dataframses from new files or with the old missingness file
-df_final_miss_stat = MAKE.MISS.STAT(data) # new data - CHANGE BOX ID
+miss_stat = MAKE.MISS.STAT(input_data) # new data - CHANGE BOX ID
 
 #Save the missingness statistics results locally as csv
-write.csv(df_final_miss_stat,"BCAC_missingness_statistics.csv",row.names = FALSE)
+write.csv(miss_stat,"BCAC_missingness_statistics.csv",row.names = FALSE)
 
 # Upload the file to the BCAC Missingness Statistics folder using box
 box_ul(120546599056, file="BCAC_missingness_statistics.csv", pb = options()$boxr.progress,description = NULL) # UPLOAD AS NEW BCAC_missingness_statistics.csv - DON'T CHANGE
