@@ -119,7 +119,6 @@ MAKE.DF = function(data){
   study_name = factor(data$study)
   study_name = levels(study_name)
   
-  
   ## Define subclasses: status ,study, chip, ethnicity
   sex <- character()
   status <- character()
