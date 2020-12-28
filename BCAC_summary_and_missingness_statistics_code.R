@@ -67,7 +67,7 @@ library(tibble)
 
 
 #[3a] Function to read box IDs
-READ.DATA= function(input_data){
+READ.DATA= function(data){
  
           # Preprocess data: Removing whitespace, rounding "ageInt" decimals down, and correcting "F" turning into FALSE in the "sex" column
           # Fix:  F turns to FALSE in R
